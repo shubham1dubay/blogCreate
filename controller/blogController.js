@@ -2,7 +2,7 @@ const Blog = require("../modules/blog");
 
 exports.getAllPosts = async (req, res) => {
   try {
-    const posts = await Blog.find().populate("author", "username email");
+    const posts = await Blog.find().populate("title content");
     res.json(posts);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -11,10 +11,7 @@ exports.getAllPosts = async (req, res) => {
 
 exports.getPost = async (req, res) => {
   try {
-    const post = await Blog.findById(req.params.id).populate(
-      "author",
-      "username email"
-    );
+    const post = await Blog.findById(req.params.id).populate("title content");
     if (!post) return res.status(404).json({ message: "Post not found" });
     res.json(post);
   } catch (err) {
@@ -24,8 +21,8 @@ exports.getPost = async (req, res) => {
 
 exports.createPost = async (req, res) => {
   try {
-    const { title, content, authorId } = req.body;
-    const post = new Blog({ title, content, author: authorId });
+    const { title, content } = req.body;
+    const post = new Blog({ title, content });
     await post.save();
     res.status(201).json(post);
   } catch (err) {
