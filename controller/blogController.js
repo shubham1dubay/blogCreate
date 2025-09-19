@@ -1,4 +1,5 @@
 const Blog = require("../modules/blog");
+const postSchema = require("../validation/blogValidation");
 
 exports.getAllPosts = async (req, res) => {
   try {
@@ -21,6 +22,9 @@ exports.getPost = async (req, res) => {
 
 exports.createPost = async (req, res) => {
   try {
+    const { error } = postSchema.validate(req.body);
+    if (error) return res.status(400).json({ msg: error.details[0].message });
+
     const { title, content } = req.body;
     const post = new Blog({ title, content });
     await post.save();
@@ -32,8 +36,9 @@ exports.createPost = async (req, res) => {
 
 exports.updatePost = async (req, res) => {
   try {
+    const { error } = postSchema.validate(req.body);
+    if (error) return res.status(400).json({ msg: error.details[0].message });
     const { title, content } = req.body;
-
     const post = await Blog.findByIdAndUpdate(
       req.params.id,
       { title, content },
