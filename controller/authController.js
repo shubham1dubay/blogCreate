@@ -22,7 +22,10 @@ exports.signup = async (req, res) => {
     const user = new User({ username, email, password: hashedPassword });
 
     await user.save();
-    res.status(201).json({ msg: "User registered successfully!" });
+    res.status(201).json({
+      msg: "User registered successfully!",
+      user: { id: user._id, username: user.username, email: user.email },
+    });
   } catch (err) {
     console.error("Signup error:", err);
     res.status(500).json({ msg: "Server error" });
@@ -49,7 +52,11 @@ exports.login = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.json({ token, msg: "Login successful" });
+    res.json({
+      msg: "Login successful",
+      user: { id: user._id, username: user.username, email: user.email },
+      token,
+    });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ msg: "Server error" });

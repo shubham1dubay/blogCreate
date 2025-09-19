@@ -6,11 +6,8 @@ const {
   updatePost,
   deletePost,
 } = require("../controller/blogController");
-
 const blogMiddleware = require("../middlewares/blogMiddleware");
-
 const router = express.Router();
-
 router.use(blogMiddleware);
 
 router.get("/", getAllPosts);
