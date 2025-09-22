@@ -13,7 +13,8 @@ exports.getAllPosts = async (req, res) => {
 exports.getPost = async (req, res) => {
   try {
     const post = await Blog.findById(req.params.id).populate("title content");
-    if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!post)
+      return res.status(404).json({ message: "Invalied Post id not found" });
     res.json(post);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -46,7 +47,7 @@ exports.updatePost = async (req, res) => {
     );
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ message: "Invalied Post ID" });
     }
 
     res.json(post);
@@ -59,7 +60,7 @@ exports.deletePost = async (req, res) => {
   try {
     const post = await Blog.findByIdAndDelete(req.params.id);
 
-    if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!post) return res.status(404).json({ message: "Invalied delete Id" });
 
     res.json({ message: "Post deleted successfully" });
   } catch (err) {
